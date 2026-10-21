@@ -1,1 +1,13 @@
+# Pasar del modelo entidad-relación al modelo relacional
 
+## Ejercicio 1: Artículos y encargos
+
+CLIENTE(número_cliente, saldo, límite_crédito, descuento)
+DIRECCIÓN_ENVÍO(id_dirección, calle, número, ciudad, código_postal)
+TIENE(número_cliente (FK), id_dirección (FK))
+PEDIDO(número_pedido, fecha_hora, número_cliente (FK), id_dirección (FK))
+LÍNEA(id_línea, cantidad, número_pedido (FK)
+CONTIENE(id_línea (FK), número_artículo (FK))
+ARTÍCULO(número_artículo, descripción_artículo)
+DISTRIBUYE(número_artículo (FK), número_fábrica (FK), existencias)
+FÁBRICA(número_fábrica, teléfono, fábricas_alternativas)
