@@ -1,1 +1,1 @@
-Repositorio para guardar ejercicios del curso de BBDD.
+Repositorio del curso de BBDD Relacionales con SQL - CIFO.
