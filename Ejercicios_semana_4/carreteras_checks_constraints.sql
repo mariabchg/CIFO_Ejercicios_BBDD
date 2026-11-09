@@ -13,7 +13,7 @@ CREATE TABLE comunidades_autonomas (
   CONSTRAINT uq_comunidad_autonoma UNIQUE (comunidad_autonoma)
 );
 
---datos "buenos"
+-- datos "buenos" de comunidades_autonomas 
 INSERT INTO comunidades_autonomas (pk_comunidad, comunidad_autonoma) VALUES (1, 'Comunidad de Madrid');
 INSERT INTO comunidades_autonomas (pk_comunidad, comunidad_autonoma) VALUES (2, 'Cataluña');
 INSERT INTO comunidades_autonomas (pk_comunidad, comunidad_autonoma) VALUES (3, 'Castilla-La Mancha');
@@ -25,8 +25,9 @@ CREATE TABLE titularidades (
   CONSTRAINT uq_titularidad UNIQUE (titularidad)
 );
 
---datos "buenos"
-
+-- datos "buenos" de titularidades
+INSERT INTO titularidades (titularidad) VALUES
+('Estatal'), ('Autonómica'), ('Provincial'), ('Municipal');
 
 CREATE TABLE tipos_via (
   pk_tipo_via int AUTO_INCREMENT,
@@ -34,6 +35,10 @@ CREATE TABLE tipos_via (
   CONSTRAINT pk_tipos_via PRIMARY KEY (pk_tipo_via),
   CONSTRAINT uq_tipo_via UNIQUE (tipo_via)
 );
+
+-- datos "buenos" de tipos_via
+INSERT INTO tipos_via (tipo_via) VALUES
+('Autopista'), ('Autovía'), ('Multicarril'), ('Convencional');
 
 CREATE TABLE niveles (
   pk_nivel int AUTO_INCREMENT,
@@ -44,12 +49,20 @@ CREATE TABLE niveles (
   CONSTRAINT uq_color UNIQUE (color)
 );
 
+-- datos "buenos" de niveles
+INSERT INTO niveles (nivel, color) VALUES
+(1, 'Naranja'), (2, 'Verde'), (3, 'Amarillo');
+
 CREATE TABLE tipos_tramo (
   pk_tipo_tramo int AUTO_INCREMENT,
   tipo_tramo varchar(30) not null,
   CONSTRAINT pk_tipos_tramo PRIMARY KEY (pk_tipo_tramo),
   CONSTRAINT uq_tipo_tramo UNIQUE (tipo_tramo)
 );
+
+-- datos "buenos" de tipos de tramo
+INSERT INTO tipos_tramo (tipo_tramo) VALUES
+('Inicio'), ('Intermedio'), ('Final');
 
 CREATE TABLE tipos_terreno (
   pk_tipo_terreno int AUTO_INCREMENT,
@@ -58,12 +71,20 @@ CREATE TABLE tipos_terreno (
   CONSTRAINT uq_tipo_terreno UNIQUE (tipo_terreno)
 );
 
+-- datos "buenos" de tipos_terreno
+INSERT INTO tipos_terreno (tipo_terreno) VALUES
+('Plano'), ('Cuesta subida'), ('Cuesta bajada');
+
 CREATE TABLE entornos (
   pk_entorno int AUTO_INCREMENT,
   entorno varchar(30) not null,
   CONSTRAINT pk_entornos PRIMARY KEY (pk_entorno),
   CONSTRAINT uq_entorno UNIQUE (entorno)
 );
+
+-- datos "buenos" de entornos
+INSERT INTO entornos (entorno) VALUES
+('Urbano'), ('Travesía'), ('Extraurbano');
 
 -- 2. Provincias
 
@@ -77,6 +98,13 @@ CREATE TABLE provincias (
     FOREIGN KEY (fk_comunidad) REFERENCES comunidades_autonomas(pk_comunidad)
     ON UPDATE CASCADE ON DELETE RESTRICT
 );
+
+-- datos "buenos"
+INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (1, 'Madrid', 1);
+INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (2, 'Barcelona', 2);
+INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (3, 'Girona', 2);
+INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (4, 'Tarragona', 2);
+INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (5, 'Toledo', 3);
 
 -- 3. Carreteras
 -- fk_nivel admite NULL: las carreteras estatales no tienen nivel
@@ -105,6 +133,19 @@ CREATE TABLE carreteras (
     ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
+-- datos "buenos"
+INSERT INTO carreteras (pk_carretera, codigo_carretera, nombre_carretera, acceso_controlado, doble_calzada, prefijo, senal, fk_titularidad, fk_tipo_via, fk_nivel)
+VALUES (1, 'AP-7', 'Autopista del Mediterráneo', 1, 1, 'AP', 'Azul', 1, 1, NULL);
+INSERT INTO carreteras (pk_carretera, codigo_carretera, nombre_carretera, acceso_controlado, doble_calzada, prefijo, senal, fk_titularidad, fk_tipo_via, fk_nivel)
+VALUES (2, 'M-607', 'Carretera de Colmenar Viejo', 0, 1, 'M', 'Verde', 2, 3, 2);
+INSERT INTO carreteras (pk_carretera, codigo_carretera, nombre_carretera, acceso_controlado, doble_calzada, prefijo, senal, fk_titularidad, fk_tipo_via, fk_nivel)
+VALUES (3, 'N-340', 'Carretera Nacional 340', 0, 0, 'N', 'Roja', 1, 4, NULL);
+INSERT INTO carreteras (pk_carretera, codigo_carretera, nombre_carretera, acceso_controlado, doble_calzada, prefijo, senal, fk_titularidad, fk_tipo_via, fk_nivel)
+VALUES (4, 'C-31', 'Carretera de la Costa', 0, 0, 'C', 'Verde', 2, 4, 1);
+INSERT INTO carreteras (pk_carretera, codigo_carretera, nombre_carretera, acceso_controlado, doble_calzada, prefijo, senal, fk_titularidad, fk_tipo_via, fk_nivel)
+VALUES (5, 'CM-42', 'Carretera de Castilla-La Mancha 42', 0, 0, 'CM', 'Verde', 2, 4, 3);
+
+
 -- una carretera puede tener varias observaciones
 CREATE TABLE observaciones_carreteras (
   pk_observacion int AUTO_INCREMENT,
@@ -115,6 +156,11 @@ CREATE TABLE observaciones_carreteras (
     FOREIGN KEY (fk_carretera) REFERENCES carreteras(pk_carretera)
     ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+-- datos "buenos"
+INSERT INTO observaciones_carreteras (pk_observacion, observacion, fk_carretera) VALUES (1, 'Peaje en todo el recorrido', 1);
+INSERT INTO observaciones_carreteras (pk_observacion, observacion, fk_carretera) VALUES (2, 'Obras de mantenimiento en verano', 1);
+INSERT INTO observaciones_carreteras (pk_observacion, observacion, fk_carretera) VALUES (3, 'Atraviesa varias localidades', 3);
 
 -- 4. Tramos
 -- la longitud no se guarda: se calcula con km_final - km_inicial
@@ -158,6 +204,22 @@ CREATE TABLE tramos (
     ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
+-- datos "buenos"
+INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
+VALUES (1, 0.000, 90.000, 120, 2, 2, 2, NULL, 1, 1, 1, 3, 3, 2);
+INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
+VALUES (2, 90.000, 200.000, 120, 2, 2, 2, NULL, 1, 3, 2, 3, 2, 4);
+INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
+VALUES (3, 0.000, 15.200, 90, 2, 2, 2, NULL, 2, 1, 2, 1, 1, 1);
+INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
+VALUES (4, 15.200, 32.800, 90, 2, 2, 2, NULL, 2, 3, 3, 3, 1, 1);
+INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
+VALUES (5, 0.000, 60.000, 90, 2, 1, 1, 'Adelantamiento limitado', 3, 1, 1, 2, 4, 4);
+INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
+VALUES (6, 0.000, 25.000, 80, 1, 2, 0, 'Tramo de sentido único', 4, 1, 1, 2, 2, 2);
+INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
+VALUES (7, 0.000, 70.000, 100, 2, 1, 1, NULL, 5, 1, 1, 3, 5, 5);
+
 -- 5. Confluencias: unión de dos tramos en una provincia
 -- km_tramo1 y km_tramo2 son los kilómetros de cada carretera en el punto de unión
 
@@ -180,66 +242,7 @@ CREATE TABLE confluencias (
     ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- 6. Valores permitidos (restricciones de dominio)
-
-INSERT INTO titularidades (titularidad) VALUES
-('Estatal'), ('Autonómica'), ('Provincial'), ('Municipal');
-
-INSERT INTO tipos_via (tipo_via) VALUES
-('Autopista'), ('Autovía'), ('Multicarril'), ('Convencional');
-
-INSERT INTO niveles (nivel, color) VALUES
-(1, 'Naranja'), (2, 'Verde'), (3, 'Amarillo');
-
-INSERT INTO tipos_terreno (tipo_terreno) VALUES
-('Plano'), ('Cuesta subida'), ('Cuesta bajada');
-
-INSERT INTO entornos (entorno) VALUES
-('Urbano'), ('Travesía'), ('Extraurbano');
-
-INSERT INTO tipos_tramo (tipo_tramo) VALUES
-('Inicio'), ('Intermedio'), ('Final');
-
--- 7. Datos de prueba (inventados)
-
-
-
-INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (1, 'Madrid', 1);
-INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (2, 'Barcelona', 2);
-INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (3, 'Girona', 2);
-INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (4, 'Tarragona', 2);
-INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (5, 'Toledo', 3);
-
-INSERT INTO carreteras (pk_carretera, codigo_carretera, nombre_carretera, acceso_controlado, doble_calzada, prefijo, senal, fk_titularidad, fk_tipo_via, fk_nivel)
-VALUES (1, 'AP-7', 'Autopista del Mediterráneo', 1, 1, 'AP', 'Azul', 1, 1, NULL);
-INSERT INTO carreteras (pk_carretera, codigo_carretera, nombre_carretera, acceso_controlado, doble_calzada, prefijo, senal, fk_titularidad, fk_tipo_via, fk_nivel)
-VALUES (2, 'M-607', 'Carretera de Colmenar Viejo', 0, 1, 'M', 'Verde', 2, 3, 2);
-INSERT INTO carreteras (pk_carretera, codigo_carretera, nombre_carretera, acceso_controlado, doble_calzada, prefijo, senal, fk_titularidad, fk_tipo_via, fk_nivel)
-VALUES (3, 'N-340', 'Carretera Nacional 340', 0, 0, 'N', 'Roja', 1, 4, NULL);
-INSERT INTO carreteras (pk_carretera, codigo_carretera, nombre_carretera, acceso_controlado, doble_calzada, prefijo, senal, fk_titularidad, fk_tipo_via, fk_nivel)
-VALUES (4, 'C-31', 'Carretera de la Costa', 0, 0, 'C', 'Verde', 2, 4, 1);
-INSERT INTO carreteras (pk_carretera, codigo_carretera, nombre_carretera, acceso_controlado, doble_calzada, prefijo, senal, fk_titularidad, fk_tipo_via, fk_nivel)
-VALUES (5, 'CM-42', 'Carretera de Castilla-La Mancha 42', 0, 0, 'CM', 'Verde', 2, 4, 3);
-
-INSERT INTO observaciones_carreteras (pk_observacion, observacion, fk_carretera) VALUES (1, 'Peaje en todo el recorrido', 1);
-INSERT INTO observaciones_carreteras (pk_observacion, observacion, fk_carretera) VALUES (2, 'Obras de mantenimiento en verano', 1);
-INSERT INTO observaciones_carreteras (pk_observacion, observacion, fk_carretera) VALUES (3, 'Atraviesa varias localidades', 3);
-
-INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
-VALUES (1, 0.000, 90.000, 120, 2, 2, 2, NULL, 1, 1, 1, 3, 3, 2);
-INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
-VALUES (2, 90.000, 200.000, 120, 2, 2, 2, NULL, 1, 3, 2, 3, 2, 4);
-INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
-VALUES (3, 0.000, 15.200, 90, 2, 2, 2, NULL, 2, 1, 2, 1, 1, 1);
-INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
-VALUES (4, 15.200, 32.800, 90, 2, 2, 2, NULL, 2, 3, 3, 3, 1, 1);
-INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
-VALUES (5, 0.000, 60.000, 90, 2, 1, 1, 'Adelantamiento limitado', 3, 1, 1, 2, 4, 4);
-INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
-VALUES (6, 0.000, 25.000, 80, 1, 2, 0, 'Tramo de sentido único', 4, 1, 1, 2, 2, 2);
-INSERT INTO tramos (pk_tramo, km_inicial, km_final, velocidad_limite, sentidos, carriles_ida, carriles_vuelta, observaciones, fk_carretera, fk_tipo_tramo, fk_tipo_terreno, fk_entorno, fk_provincia_inicial, fk_provincia_final)
-VALUES (7, 0.000, 70.000, 100, 2, 1, 1, NULL, 5, 1, 1, 3, 5, 5);
-
+-- datos "buenos"
 INSERT INTO confluencias (pk_confluencia, km_tramo1, km_tramo2, fk_tramo1, fk_tramo2, fk_provincia) VALUES (1, 195.000, 12.500, 2, 5, 4);
 INSERT INTO confluencias (pk_confluencia, km_tramo1, km_tramo2, fk_tramo1, fk_tramo2, fk_provincia) VALUES (2, 85.000, 18.000, 1, 6, 2);
 
