@@ -158,8 +158,7 @@ INSERT INTO facturas_productos (fk_factura, fk_producto, cantidad, precio_venta)
 
 
 -- ============ INSERT MALOS ============
--- Quita el "-- " del principio de UNA linea, ejecutala sola y mira el error.
--- Despues vuelve a comentarla.
+-- Para provar, quitar los guiones de comentario. 
 
 -- 1. cantidad 0 (CHECK). Error esperado: 3819, cantidad_positiva
 -- INSERT INTO facturas_productos (fk_factura, fk_producto, cantidad, precio_venta) VALUES (1, 3, 0, 2.50);
