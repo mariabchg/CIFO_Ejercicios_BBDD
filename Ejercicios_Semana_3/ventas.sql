@@ -19,6 +19,7 @@ CREATE TABLE proveedores (
   codigo_postal char(5) not null,
   CONSTRAINT pk_proveedores PRIMARY KEY (pk_proveedor),
   CONSTRAINT cif_nif_proveedor UNIQUE (cif_nif)
+  CONSTRAINT numero_direccion_positivo_proveedor CHECK (numero > 0)
 );
 
 -- tabla clientes
@@ -32,6 +33,7 @@ CREATE TABLE clientes (
   codigo_postal char(5) not null,
   CONSTRAINT pk_clientes PRIMARY KEY (pk_cliente),
   CONSTRAINT cif_nif_cliente UNIQUE (cif_nif)
+  CONSTRAINT numero_direccion_positivo_cliente CHECK (numero > 0)
 );
 
 -- tabla categorias
