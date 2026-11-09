@@ -13,12 +13,20 @@ CREATE TABLE comunidades_autonomas (
   CONSTRAINT uq_comunidad_autonoma UNIQUE (comunidad_autonoma)
 );
 
+--datos "buenos"
+INSERT INTO comunidades_autonomas (pk_comunidad, comunidad_autonoma) VALUES (1, 'Comunidad de Madrid');
+INSERT INTO comunidades_autonomas (pk_comunidad, comunidad_autonoma) VALUES (2, 'Cataluña');
+INSERT INTO comunidades_autonomas (pk_comunidad, comunidad_autonoma) VALUES (3, 'Castilla-La Mancha');
+
 CREATE TABLE titularidades (
   pk_titularidad int AUTO_INCREMENT,
   titularidad varchar(20) not null,
   CONSTRAINT pk_titularidades PRIMARY KEY (pk_titularidad),
   CONSTRAINT uq_titularidad UNIQUE (titularidad)
 );
+
+--datos "buenos"
+
 
 CREATE TABLE tipos_via (
   pk_tipo_via int AUTO_INCREMENT,
@@ -194,9 +202,7 @@ INSERT INTO tipos_tramo (tipo_tramo) VALUES
 
 -- 7. Datos de prueba (inventados)
 
-INSERT INTO comunidades_autonomas (pk_comunidad, comunidad_autonoma) VALUES (1, 'Comunidad de Madrid');
-INSERT INTO comunidades_autonomas (pk_comunidad, comunidad_autonoma) VALUES (2, 'Cataluña');
-INSERT INTO comunidades_autonomas (pk_comunidad, comunidad_autonoma) VALUES (3, 'Castilla-La Mancha');
+
 
 INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (1, 'Madrid', 1);
 INSERT INTO provincias (pk_provincia, nombre_provincia, fk_comunidad) VALUES (2, 'Barcelona', 2);
