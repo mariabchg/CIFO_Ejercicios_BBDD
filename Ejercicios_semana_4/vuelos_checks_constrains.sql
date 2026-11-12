@@ -6,7 +6,7 @@ CREATE DATABASE vuelos
   DEFAULT COLLATE utf8mb4_general_ci;
 USE vuelos;
 
--- ============ 1. TABLAS QUE NO DEPENDEN DE NINGUNA OTRA ============
+-- ============ 1. TABLAS QUE NO DEPENDEN DE NINGUNA OTRA - REFERENCIA ============
 
 -- tabla paises
 CREATE TABLE paises (
