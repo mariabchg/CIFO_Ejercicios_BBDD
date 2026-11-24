@@ -202,6 +202,14 @@ FROM cliente AS c
 LEFT JOIN pedido AS p ON c.pk_cliente = p.fk_cliente
 WHERE p.pk_pedido IS NULL;
 
+-- 13 sin UNION 
+
+SELECT DISTINCT c.pk_cliente, c.nombre_cliente
+FROM cliente AS c
+LEFT JOIN pago AS pa ON c.pk_cliente = pa.fk_cliente
+LEFT JOIN pedido AS pe ON c.pk_cliente = pe.fk_cliente
+WHERE pa.fk_cliente IS NULL OR pe.pk_pedido IS NULL;
+
 -- 14. Empleados sin oficina asociada
 SELECT e.*
 FROM empleado AS e
@@ -234,6 +242,13 @@ SELECT e.pk_empleado, e.nombre, e.apellido1
 FROM empleado AS e
 LEFT JOIN cliente AS c ON e.pk_empleado = c.fk_representante_ventas
 WHERE c.pk_cliente IS NULL;
+
+--17 sin UNION
+SELECT DISTINCT e.pk_empleado, e.nombre, e.apellido1
+FROM empleado AS e
+LEFT JOIN oficina AS o ON e.fk_oficina = o.pk_oficina
+LEFT JOIN cliente AS c ON e.pk_empleado = c.fk_representante_ventas
+WHERE o.pk_oficina IS NULL OR c.pk_cliente IS NULL;
 
 -- 18. Productos que nunca han aparecido en un pedido
 SELECT p.*
