@@ -296,25 +296,7 @@ LEFT JOIN detalle_pedido AS d
 ON p.pk_producto = d.fk_producto
 WHERE d.fk_pedido IS NULL;
 
--- 20. Oficinas donde no trabaja ningún empleado que haya sido representante
---     de un cliente que compró productos de la gama Frutales
-SELECT o.*
-FROM oficina AS o
-WHERE o.pk_oficina NOT IN (
-  SELECT e.fk_oficina
-  FROM empleado AS e
-  JOIN cliente AS c
-  ON c.fk_representante_ventas = e.pk_empleado
-  JOIN pedido AS pe
-  ON pe.fk_cliente = c.pk_cliente
-  JOIN detalle_pedido AS d
-  ON d.fk_pedido = pe.pk_pedido
-  JOIN producto AS pr
-  ON d.fk_producto = pr.pk_producto
-  JOIN gama_producto AS g
-  ON pr.fk_gama = g.pk_gama
-  WHERE g.gama = 'Frutales'
-);
+-- 20. Se deja para subconsultas
 
 -- 21. Clientes con algún pedido pero sin ningún pago
 SELECT DISTINCT c.*
