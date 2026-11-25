@@ -54,8 +54,7 @@ SET @ciudad = 'Madrid';
 
 SELECT *
 FROM listado_pagos_clientes
-WHERE ciudad = @ciudad
-  AND fecha_pago IS NOT NULL;
+WHERE ciudad = @ciudad AND fecha_pago IS NOT NULL;
 
 
 -- 5. Cambiar la variable a Miami y repetir
