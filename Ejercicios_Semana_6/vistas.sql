@@ -64,3 +64,70 @@ SET @ciudad = 'Miami';
 SELECT *
 FROM listado_pagos_clientes
 WHERE ciudad = @ciudad AND fecha_pago IS NOT NULL;
+
+------------------- 6 -------------------------
+
+USE nomina;
+
+-- Ejercicio 11: más de 20 años en la empresa
+CREATE OR REPLACE VIEW empleados_veteranos AS
+SELECT
+  e.nombre,
+  e.apellido,
+  c.cargo,
+  d.departamento,
+  TIMESTAMPDIFF(YEAR, e.fecha_contrato, CURDATE()) AS antiguedad
+FROM empleado AS e
+JOIN cargo AS c ON e.fk_cargo = c.pk_cargo
+JOIN departamento AS d ON e.fk_departamento = d.pk_departamento
+WHERE TIMESTAMPDIFF(YEAR, e.fecha_contrato, CURDATE()) > 20
+ORDER BY d.departamento ASC, antiguedad DESC;
+
+-- Ejercicio 12: solteros, divorciados o viudos con más de un hijo
+CREATE OR REPLACE VIEW empleados_sin_pareja_con_hijos AS
+SELECT
+  e.nombre,
+  e.apellido,
+  TIMESTAMPDIFF(YEAR, e.fecha_nacimiento, CURDATE()) AS edad,
+  c.cargo,
+  d.departamento
+FROM empleado AS e
+JOIN cargo AS c ON e.fk_cargo = c.pk_cargo
+JOIN departamento AS d ON e.fk_departamento = d.pk_departamento
+WHERE e.estado_civil IN ('Soltero', 'Divorciado', 'Viudo')
+  AND e.hijos > 1;
+
+-- Ejercicio 14: todos los cargos con sus empleados
+CREATE OR REPLACE VIEW listado_cargos_empleados AS
+SELECT
+  c.cargo,
+  e.nombre,
+  e.apellido,
+  TIMESTAMPDIFF(YEAR, e.fecha_nacimiento, CURDATE()) AS edad,
+  e.estado_civil
+FROM cargo AS c
+LEFT JOIN empleado AS e ON c.pk_cargo = e.fk_cargo;
+
+-- Ejercicio 15: departamentos sin empleados
+CREATE OR REPLACE VIEW departamentos_sin_empleados AS
+SELECT d.pk_departamento, d.departamento
+FROM departamento AS d
+LEFT JOIN empleado AS e ON d.pk_departamento = e.fk_departamento
+WHERE e.pk_empleado IS NULL;
+
+-----------------------------------------------------------------------
+
+-- 7. Eliminar la vista listado_pedidos_clientes
+USE jardineria;
+DROP VIEW listado_pedidos_clientes;
+
+
+-- 8. Tabla con el resultado de la vista más sencilla (departamentos_sin_empleados)
+USE nomina;
+DROP TABLE IF EXISTS copia_departamentos_sin_empleados;
+CREATE TABLE copia_departamentos_sin_empleados AS
+SELECT * FROM departamentos_sin_empleados;
+
+SELECT * FROM copia_departamentos_sin_empleados;
+
+
