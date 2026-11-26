@@ -117,39 +117,10 @@ HAVING edad_promedio > 45;
 -- 18. Empleados con sueldo mayor o igual a 1800 €
 SELECT COUNT(*) AS num_empleados
 FROM empleado
-WHERE sueldo >= 1800;
+WHERE suel >= 1800;
 -- Si el enunciado habla de sueldo mensual:
 -- SELECT COUNT(*) AS num_empleados FROM empleado WHERE sueldo / 12 >= 1800;
 
 -- 19. Empleados con edad menor o igual a 28 años
 SELECT COUNT(*) AS num_empleados
-FROM empleado
-WHERE TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) <= 28;
-
--- 20. Departamentos cuyos empleados tienen una edad promedio mayor o igual a 35
-SELECT d.departamento
-FROM departamento AS d
-JOIN empleado AS e ON d.pk_departamento = e.fk_departamento
-GROUP BY d.pk_departamento, d.departamento
-HAVING AVG(TIMESTAMPDIFF(YEAR, e.fecha_nacimiento, CURDATE())) >= 35;
-
--- 21. Cargos que tienen 5 o más empleados
-SELECT c.cargo
-FROM cargo AS c
-JOIN empleado AS e ON c.pk_cargo = e.fk_cargo
-GROUP BY c.pk_cargo, c.cargo
-HAVING COUNT(*) >= 5;
-
--- 22. Departamentos donde el promedio de edad es superior a 40 años
-SELECT d.departamento
-FROM departamento AS d
-JOIN empleado AS e ON d.pk_departamento = e.fk_departamento
-GROUP BY d.pk_departamento, d.departamento
-HAVING AVG(TIMESTAMPDIFF(YEAR, e.fecha_nacimiento, CURDATE())) > 40;
-
--- 23. Número de empleados por departamento, incluyendo los que no tienen ninguno
-SELECT d.departamento, COUNT(e.pk_empleado) AS num_empleados
-FROM departamento AS d
-LEFT JOIN empleado AS e ON d.pk_departamento = e.fk_departamento
-GROUP BY d.pk_departamento, d.departamento
-ORDER BY num_empleados DESC;
+FROM 
